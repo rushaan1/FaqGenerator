@@ -7,7 +7,7 @@ struct FAQ
 	char question[5000];
 	char answer[10000];
 	bool important;
-}
+};
 
 void main()
 {
@@ -17,7 +17,7 @@ void main()
 	getchar();
 	struct FAQ faq[n];
 	struct FAQ *ptrFaq = faq;
-	int title[500];
+	char title[500];
 	printf("Supply a title for the FAQs: \n");
 	fgets(title, sizeof(title), stdin);
 	int length4 = strlen(title);
@@ -53,25 +53,36 @@ void main()
 		else if (imp=='N')
 		{
 			(*(ptrFaq+i)).important = false;
-		}
-		strcpy(("%d.%s",i,(*(ptrFaq+i)).question), input); 
-		strcpy(("A:%s",(*(ptrFaq+i)).question), input2); 
+		} 
+		char cinput[5000];
+		char cinput2[10000] = "A:";
+		sprintf(cinput,"%d.", i+1);
+		strcat(cinput,input);
+		strcat(cinput2,input2);  
+		strcpy((*(ptrFaq+i)).question, cinput); 
+		strcpy((*(ptrFaq+i)).answer, cinput2); 
 	}
 
-	FILE *fptr = fopen(("%s.txt",title),"w");
+	char filename[500]; 
+
+    sprintf(filename, "%s.txt", title);
+
+    FILE *fptr = fopen(filename, "w");
+
 	for (int i = 0; i<n; i++)
 	{
 		struct FAQ ptrfaq = (*(ptrFaq+i));
 		fprintf(fptr, "%s\n", ptrfaq.question);
-        fprintf(fptr, "&s\n", ptrfaq.answer);
-        if (ptrfaq.answer == true)
+        fprintf(fptr, "%s\n", ptrfaq.answer);
+        if (ptrfaq.important) 
 		{ 
-			fprintf(fptr, "Important: Yes");
+			fprintf(fptr, "Important: Yes\n");
 		}
 		else
 		{
-			fprintf(fptr, "Important: No");
+			fprintf(fptr, "Important: No\n");
 		}
         fprintf(fptr, "\n"); 
 	}
+    fclose(fptr);
 }
